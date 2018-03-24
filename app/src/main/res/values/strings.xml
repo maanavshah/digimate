@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Digimate</string>
+    <string name="pdf_title">Pdf Title</string>
+    <string name="enter_pdf_title">Enter the title of pdf</string>
+    <string name="pdf_pages">Pdf Pages</string>
+    <string name="enter_pdf_pages">Enter the total pages in pdf</string>
+    <string name="run">Generate PDF</string>
+    <string name="capture">Capture</string>
+</resources>
