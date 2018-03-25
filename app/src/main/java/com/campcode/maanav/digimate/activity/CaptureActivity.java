@@ -1,5 +1,6 @@
 package com.campcode.maanav.digimate.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -52,6 +53,9 @@ public class CaptureActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.v(TAG, e.getMessage());
             }
+
+            // Start crop activity
+            nextStep();
         }
     };
 
@@ -86,6 +90,10 @@ public class CaptureActivity extends AppCompatActivity {
         Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(),
                 matrix, true);
         return rotatedImg;
+    }
+
+    private void nextStep() {
+        startActivity(new Intent(CaptureActivity.this, CropActivity.class));
     }
 
     @Override

@@ -25,5 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:design:26.+'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'    // Crop and rotate image
     testCompile 'junit:junit:4.12'
 }
