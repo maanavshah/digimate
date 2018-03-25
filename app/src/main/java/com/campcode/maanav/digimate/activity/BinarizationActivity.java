@@ -1,5 +1,6 @@
 package com.campcode.maanav.digimate.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,10 +16,10 @@ import com.googlecode.leptonica.android.GrayQuant;
 import com.googlecode.leptonica.android.Pix;
 
 public class BinarizationActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+    public static Bitmap umbralization;
     private Pix pix;
     private FloatingActionButton fab;
     private ImageView img;
-    private Bitmap umbralization;
     private AppCompatSeekBar seekBar;
 
     @Override
@@ -61,6 +62,7 @@ public class BinarizationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.nextStep) {
+            startActivity(new Intent(BinarizationActivity.this, RecognizerActivity.class));
         }
     }
 }

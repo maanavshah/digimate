@@ -19,6 +19,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
     public static Bitmap croppedImage;
     private CropImageView cropImageView;
     private FloatingActionButton mFab;
+    public static Uri uriImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         File filePath = new File(Environment.getExternalStorageDirectory() +
                 MainActivity.DIRECTORY_PATH);
         File fileImage = new File(filePath, MainActivity.FILE_NAMES.get(MainActivity.CURRENT_PAGE));
-        Uri uriImage = Uri.fromFile(fileImage);
+        uriImage = Uri.fromFile(fileImage);
 
         // Set URI image to display
         cropImageView = (CropImageView) findViewById(R.id.cropImageView);

@@ -24,9 +24,17 @@
         </activity>
         <activity
             android:name=".activity.CaptureActivity"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activity.CropActivity" />
-        <activity android:name=".activity.BinarizationActivity"></activity>
+        <activity
+            android:name=".activity.CropActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".activity.BinarizationActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".activity.RecognizerActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>
