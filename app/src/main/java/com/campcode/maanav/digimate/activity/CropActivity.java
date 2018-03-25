@@ -1,5 +1,6 @@
 package com.campcode.maanav.digimate.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,9 +54,14 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onCropImageComplete(CropImageView view, CropImageView.CropResult result) {
                     croppedImage = result.getBitmap();
+                    nextStep();
                 }
             });
             cropImageView.getCroppedImageAsync();
         }
+    }
+
+    private void nextStep() {
+        startActivity(new Intent(CropActivity.this, BinarizationActivity.class));
     }
 }

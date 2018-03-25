@@ -27,5 +27,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'    // Crop and rotate image
+    compile 'com.rmtheis:tess-two:6.0.4'    // OCR and Binarization
     testCompile 'junit:junit:4.12'
 }

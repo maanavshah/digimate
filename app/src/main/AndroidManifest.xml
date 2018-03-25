@@ -26,6 +26,7 @@
             android:name=".activity.CaptureActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".activity.CropActivity" />
+        <activity android:name=".activity.BinarizationActivity"></activity>
     </application>
 
 </manifest>

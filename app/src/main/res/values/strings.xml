@@ -6,4 +6,5 @@
     <string name="enter_pdf_pages">Enter the total pages in pdf</string>
     <string name="run">Generate PDF</string>
     <string name="capture">Capture</string>
+    <string name="enhance">Enhance</string>
 </resources>
