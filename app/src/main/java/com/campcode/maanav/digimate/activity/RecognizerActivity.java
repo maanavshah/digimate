@@ -19,8 +19,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.campcode.maanav.digimate.R;
+import com.campcode.maanav.digimate.helper.PdfGenerator;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -163,6 +165,14 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
         if (view.getId() == R.id.nextStep) {
             if (MainActivity.CURRENT_PAGE < MainActivity.PDF_PAGES) {
                 startActivity(new Intent(RecognizerActivity.this, CaptureActivity.class));
+            } else {
+                Toast.makeText(this, "Generating Image and Text PDF", Toast.LENGTH_SHORT).show();
+                PdfGenerator.generateImagePdf();
+                PdfGenerator.generateText(RecognizerActivity.this, MainActivity.PDF_TITLE,
+                        MainActivity.PDF_CONTENT);
+                PdfGenerator.deleteImageFiles();
+                Toast.makeText(this, "PDF Generated", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RecognizerActivity.this, MainActivity.class));
             }
         }
     }
