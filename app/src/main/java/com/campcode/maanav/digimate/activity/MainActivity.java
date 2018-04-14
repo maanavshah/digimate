@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> FILE_NAMES = new ArrayList<>();
     private EditText editTitle, editPages;
     private Button buttonGenerate;
-    private long TIME_OUT = 1000;   // Interval to start camera
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +38,35 @@ public class MainActivity extends AppCompatActivity {
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Request Camera Permissions
-                    requestCameraPermission();
-                } else if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Request External Storage Write Permissions
-                    requestExternalStoragePermission();
+                PDF_TITLE = editTitle.getText().toString();
+                String pages = editPages.getText().toString();
+                if (PDF_TITLE.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter the title of PDF",
+                            Toast.LENGTH_SHORT).show();
+                } else if (pages.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter the total pages in PDF",
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    PDF_TITLE = editTitle.getText().toString();
-                    String pages = editPages.getText().toString();
-                    if (PDF_TITLE.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Please enter the title of PDF",
-                                Toast.LENGTH_SHORT).show();
-                    } else if (pages.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Please enter the total pages in PDF",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        PDF_PAGES = Integer.parseInt(pages);
-                        CURRENT_PAGE = 0;
-                        PDF_CONTENT = "";
-                        if (CURRENT_PAGE < PDF_PAGES) {
+                    PDF_PAGES = Integer.parseInt(pages);
+                    CURRENT_PAGE = 0;
+                    PDF_CONTENT = "";
+                    if (CURRENT_PAGE < PDF_PAGES) {
+                        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // Request Camera Permissions
+                            requestCameraPermission();
+                        } else if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // Request External Storage Permissions
+                            requestExternalStoragePermission();
+                        } else if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_CONTACTS)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            // Request Contact Permissions
+                            requestContactPermission();
+                        } else {
                             startCamera();
                         }
                     }
@@ -69,18 +75,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void requestExternalStoragePermission() {
-        Toast.makeText(MainActivity.this, "External storage permission is not granted.",
-                Toast.LENGTH_SHORT).show();
+    private void requestContactPermission() {
         ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                new String[]{Manifest.permission.WRITE_CONTACTS}, 3);
+    }
+
+    private void requestExternalStoragePermission() {
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
     }
 
     private void requestCameraPermission() {
-        Toast.makeText(MainActivity.this, "Camera permission is not granted.",
-                Toast.LENGTH_SHORT).show();
         ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{Manifest.permission.CAMERA}, 2);
+                new String[]{Manifest.permission.CAMERA}, 1);
     }
 
     private void initActivity() {
@@ -91,11 +98,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCamera() {
+        long TIME_OUT = 100;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(MainActivity.this, CaptureActivity.class));
             }
         }, TIME_OUT);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestExternalStoragePermission();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Camera permission not granted.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+            case 2:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestContactPermission();
+                } else {
+                    Toast.makeText(getApplicationContext(), "External Storage permission not granted.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+            case 3:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startCamera();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Contact permission not granted.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
     }
 }
