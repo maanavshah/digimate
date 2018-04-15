@@ -1,6 +1,5 @@
 package com.campcode.maanav.digimate.helper;
 
-import android.content.Context;
 import android.os.Environment;
 
 import com.campcode.maanav.digimate.activity.MainActivity;
@@ -23,7 +22,7 @@ import java.io.IOException;
 public class PdfGenerator {
     private static String dirpath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-    public static void generateText(Context context, String sFileName, String sBody) {
+    public static void generateText(String sFileName, String sBody) {
         try {
             File root = new File(Environment.getExternalStorageDirectory(), "");
             if (!root.exists()) {
@@ -44,26 +43,26 @@ public class PdfGenerator {
         try {
             PdfWriter.getInstance(document, new FileOutputStream(
                     dirpath + "/" +
-                            MainActivity.PDF_TITLE + "_image.pdf")); //  Change pdf's name.
+                            MainActivity.TITLE + "_image.pdf")); //  Change pdf's name.
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
         document.open();
 
-        for (int i = 0; i < MainActivity.PDF_PAGES; i++) {
+        for (int i = 0; i < MainActivity.TOTAL_PAGES; i++) {
             Image img = null;  // Change image's name and extension.
             try {
                 img = Image.getInstance(dirpath + MainActivity.DIRECTORY_PATH + File.separator +
                         MainActivity.FILE_NAMES.get(i));
-            } catch (BadElementException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (BadElementException | IOException e) {
                 e.printStackTrace();
             }
 
             float width = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
             float height = document.getPageSize().getHeight() - document.topMargin() - document.bottomMargin();
-            img.scaleToFit(width, height);
+            if (img != null) {
+                img.scaleToFit(width, height);
+            }
 
             // OR USE SCALER
             // float scaler = ((document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin() - 0) / img.getWidth()) * 100; // 0 means you have no indentation. If you have any, change it.
@@ -81,7 +80,7 @@ public class PdfGenerator {
     }
 
     public static void deleteImageFiles() {
-        for (int i = 0; i < MainActivity.PDF_PAGES; i++) {
+        for (int i = 0; i < MainActivity.TOTAL_PAGES; i++) {
             File file = new File(dirpath + MainActivity.DIRECTORY_PATH + File.separator,
                     MainActivity.FILE_NAMES.get(i));
             if (file.exists()) {

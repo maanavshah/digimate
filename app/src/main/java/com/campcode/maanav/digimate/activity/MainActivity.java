@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String PDF_TITLE;
-    public static int PDF_PAGES;
-    public static String PDF_CONTENT;
+    public static String TITLE;
+    public static int TOTAL_PAGES;
+    public static String CONTENT;
     public static int CURRENT_PAGE;
     public static String DIRECTORY_PATH = "/Android/data/com.campcode.maanav.digimate";
     public static ArrayList<String> FILE_NAMES = new ArrayList<>();
@@ -38,19 +39,19 @@ public class MainActivity extends AppCompatActivity {
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PDF_TITLE = editTitle.getText().toString();
+                TITLE = editTitle.getText().toString();
                 String pages = editPages.getText().toString();
-                if (PDF_TITLE.isEmpty()) {
+                if (TITLE.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please enter the title of PDF",
                             Toast.LENGTH_SHORT).show();
                 } else if (pages.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please enter the total pages in PDF",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    PDF_PAGES = Integer.parseInt(pages);
+                    TOTAL_PAGES = Integer.parseInt(pages);
                     CURRENT_PAGE = 0;
-                    PDF_CONTENT = "";
-                    if (CURRENT_PAGE < PDF_PAGES) {
+                    CONTENT = "";
+                    if (CURRENT_PAGE < TOTAL_PAGES) {
                         if (ContextCompat.checkSelfPermission(MainActivity.this,
                                 Manifest.permission.CAMERA)
                                 != PackageManager.PERMISSION_GRANTED) {
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1:

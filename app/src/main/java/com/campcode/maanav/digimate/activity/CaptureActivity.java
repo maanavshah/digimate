@@ -20,7 +20,6 @@ import com.campcode.maanav.digimate.R;
 import com.campcode.maanav.digimate.helper.CameraPreview;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -28,8 +27,6 @@ public class CaptureActivity extends AppCompatActivity {
 
     private static String TAG = "CaptureActivity";
     private Camera mCamera;
-    private CameraPreview mPreview;
-    private Bitmap capturedImage;
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
         @Override
@@ -43,13 +40,11 @@ public class CaptureActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                capturedImage = rotateImage(BitmapFactory.decodeByteArray(data, 0,
+                Bitmap capturedImage = rotateImage(BitmapFactory.decodeByteArray(data, 0,
                         data.length), 90);
                 capturedImage.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 fos.flush();
                 fos.close();
-            } catch (FileNotFoundException e) {
-                Log.v(TAG, e.getMessage());
             } catch (IOException e) {
                 Log.v(TAG, e.getMessage());
             }
@@ -87,9 +82,8 @@ public class CaptureActivity extends AppCompatActivity {
     private static Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(),
+        return Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(),
                 matrix, true);
-        return rotatedImg;
     }
 
     private void nextStep() {
@@ -107,7 +101,7 @@ public class CaptureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_capture);
 
         mCamera = getCameraInstance();
-        mPreview = new CameraPreview(this, mCamera);
+        CameraPreview mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.frame_preview);
         preview.addView(mPreview);
 

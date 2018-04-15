@@ -18,9 +18,7 @@ import com.googlecode.leptonica.android.Pix;
 public class BinarizationActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     public static Bitmap umbralization;
     private Pix pix;
-    private FloatingActionButton fab;
     private ImageView img;
-    private AppCompatSeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +26,8 @@ public class BinarizationActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_binarization);
 
         img = (ImageView) findViewById(R.id.croppedImage);
-        fab = (FloatingActionButton) findViewById(R.id.nextStep);
-        fab.setOnClickListener(this);
+        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.nextStep);
+        mFab.setOnClickListener(this);
         pix = com.googlecode.leptonica.android.ReadFile.readBitmap(CropActivity.croppedImage);
 
         OtsuThresholder otsuThresholder = new OtsuThresholder();
@@ -39,8 +37,8 @@ public class BinarizationActivity extends AppCompatActivity implements View.OnCl
         umbralization = com.googlecode.leptonica.android.WriteFile.writeBitmap
                 (GrayQuant.pixThresholdToBinary(pix, threshold));
         img.setImageBitmap(umbralization);
-        seekBar = (AppCompatSeekBar) findViewById(R.id.umbralization);
-        seekBar.setProgress(Integer.valueOf((50 * threshold) / 254));
+        AppCompatSeekBar seekBar = (AppCompatSeekBar) findViewById(R.id.umbralization);
+        seekBar.setProgress((50 * threshold) / 254);
         seekBar.setOnSeekBarChangeListener(this);
     }
 

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.campcode.maanav.digimate.R;
+import com.campcode.maanav.digimate.helper.ContactWriter;
 import com.campcode.maanav.digimate.helper.PdfGenerator;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -40,10 +41,8 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
     private String textScanned;     // textScanned has extracted text output
     private String DATA_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() +
             MainActivity.DIRECTORY_PATH + File.separator;
-    private TessBaseAPI baseApi;
     private AsyncTask<Void, Void, Void> copy = new copyTask();
     private AsyncTask<Void, Void, Void> ocr = new ocrTask();
-    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
                 String ett = search.getText().toString().replaceAll("\n", " ");
                 String tvt = textExtracted.getText().toString().replaceAll("\n", " ");
                 textExtracted.setText(textExtracted.getText().toString());
-                if (!ett.toString().isEmpty()) {
+                if (!ett.isEmpty()) {
                     int ofe = tvt.toLowerCase().indexOf(ett.toLowerCase(), 0);
                     Spannable WordtoSpan = new SpannableString(textExtracted.getText());
                     for (int ofs = 0; ofs < tvt.length() && ofe != -1; ofs = ofe + 1) {
@@ -107,7 +106,7 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
         progressOcr.setTitle("OCR");
         progressOcr.setMessage("Extracting text, please wait");
         textScanned = "";
-        mFab = (FloatingActionButton) findViewById(R.id.nextStep);
+        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.nextStep);
         mFab.setOnClickListener(this);
     }
 
@@ -120,25 +119,25 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
         } catch (IOException e) {
             Log.e("tag", "Failed to get asset file list.", e);
         }
-        for (String filename : files) {
-            Log.i("files", filename);
-            InputStream in;
-            OutputStream out;
-            String dirout = DATA_PATH + "tessdata/";
-            File outFile = new File(dirout, filename);
-            if (!outFile.exists()) {
-                try {
-                    in = assetManager.open("trainneddata/" + filename);
-                    (new File(dirout)).mkdirs();
-                    out = new FileOutputStream(outFile);
-                    copyFile(in, out);
-                    in.close();
-                    in = null;
-                    out.flush();
-                    out.close();
-                    out = null;
-                } catch (IOException e) {
-                    Log.e("tag", "Error creating files", e);
+        if (files != null) {
+            for (String filename : files) {
+                Log.i("files", filename);
+                InputStream in;
+                OutputStream out;
+                String dirout = DATA_PATH + "tessdata/";
+                File outFile = new File(dirout, filename);
+                if (!outFile.exists()) {
+                    try {
+                        in = assetManager.open("trainneddata/" + filename);
+                        (new File(dirout)).mkdirs();
+                        out = new FileOutputStream(outFile);
+                        copyFile(in, out);
+                        in.close();
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        Log.e("tag", "Error creating files", e);
+                    }
                 }
             }
         }
@@ -154,7 +153,7 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
 
     private void recognizeText() {
         String language = "eng";
-        baseApi = new TessBaseAPI();
+        TessBaseAPI baseApi = new TessBaseAPI();
         baseApi.init(DATA_PATH, language, TessBaseAPI.OEM_TESSERACT_ONLY);
         baseApi.setImage(BinarizationActivity.umbralization);
         textScanned = baseApi.getUTF8Text();
@@ -163,15 +162,19 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.nextStep) {
-            if (MainActivity.CURRENT_PAGE < MainActivity.PDF_PAGES) {
+            if (MainActivity.CURRENT_PAGE < MainActivity.TOTAL_PAGES) {
+                // if pages scanned are less than total pages
                 startActivity(new Intent(RecognizerActivity.this, CaptureActivity.class));
             } else {
-                Toast.makeText(this, "Generating Image and Text PDF", Toast.LENGTH_SHORT).show();
+                // if all pages scanned, then genereate pdf's and save contact
                 PdfGenerator.generateImagePdf();
-                PdfGenerator.generateText(RecognizerActivity.this, MainActivity.PDF_TITLE,
-                        MainActivity.PDF_CONTENT);
+                PdfGenerator.generateText(MainActivity.TITLE,
+                        MainActivity.CONTENT);
                 PdfGenerator.deleteImageFiles();
-                Toast.makeText(this, "PDF Generated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "PDF's Generated", Toast.LENGTH_SHORT).show();
+                ContactWriter contactWriter = new ContactWriter(this);
+                contactWriter.addContact(MainActivity.TITLE, MainActivity.CONTENT);
+                Toast.makeText(this, "Contact Saved as " + MainActivity.TITLE, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(RecognizerActivity.this, MainActivity.class));
             }
         }
@@ -219,7 +222,7 @@ public class RecognizerActivity extends AppCompatActivity implements View.OnClic
         protected Void doInBackground(Void... params) {
             Log.i("OCRTask", "extracting..");
             recognizeText();
-            MainActivity.PDF_CONTENT += textScanned;
+            MainActivity.CONTENT += textScanned;
             MainActivity.CURRENT_PAGE++;
             return null;
         }

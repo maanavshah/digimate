@@ -17,9 +17,8 @@ import java.io.File;
 public class CropActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static Bitmap croppedImage;
-    private CropImageView cropImageView;
-    private FloatingActionButton mFab;
     public static Uri uriImage;
+    private CropImageView cropImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,7 @@ public class CropActivity extends AppCompatActivity implements View.OnClickListe
         // cropImageView.rotateImage(angle);
         // For ex., cropImageView.rotateImage(-90);
 
-        mFab = (FloatingActionButton) findViewById(R.id.nextStep);
+        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.nextStep);
         mFab.setOnClickListener(this);
     }
 

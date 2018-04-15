@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="@string/pdf_title"
+        android:text="@string/contact_name"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:ems="10"
-        android:hint="@string/enter_pdf_title"
+        android:hint="@string/name_of_person"
         android:inputType="textPersonName"
         android:textSize="14sp" />
 
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/pdf_pages"
+        android:text="@string/business_card"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:ems="10"
-        android:hint="@string/enter_pdf_pages"
+        android:hint="@string/number_of_cards"
         android:inputType="number"
         android:textSize="14sp" />
 

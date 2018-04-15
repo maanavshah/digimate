@@ -4,7 +4,14 @@
     <string name="enter_pdf_title">Enter the title of pdf</string>
     <string name="pdf_pages">Pdf Pages</string>
     <string name="enter_pdf_pages">Enter the total pages in pdf</string>
-    <string name="run">Generate PDF</string>
+    <string name="run">Save</string>
     <string name="capture">Capture</string>
     <string name="enhance">Enhance</string>
+    <string name="emailRegex">^[A–Z0–9._%+–]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$</string>
+    <string name="whitespaceRegex">\\s+</string>
+    <string name="contact_name">Contact name</string>
+    <string name="name_of_person">Enter name of person</string>
+    <string name="business_card">Business Card</string>
+    <string name="number_of_cards">Enter number of cards to scan</string>
+    <string name="search">Search</string>
 </resources>
